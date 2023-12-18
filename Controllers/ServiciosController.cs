@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaReservaAPI.Models;
 using SistemaReservaAPI.Server.Models;
 
 namespace SistemaReservaAPI.Controllers
 {
-    public class ServicioController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class
+        ServiciosController : ControllerBase
     {
         private readonly SistemaReservaCitaContext _context;
 
-        public ServicioController(SistemaReservaCitaContext context)
+        public ServiciosController(SistemaReservaCitaContext context)
         {
             _context = context;
         }
