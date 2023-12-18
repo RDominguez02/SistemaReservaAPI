@@ -62,6 +62,14 @@ public partial class SistemaReservaCitaContext : DbContext
         await Database.ExecuteSqlRawAsync("EXEC Agendatudia @IdParametroNumerico, @ParametroNvarchar, @ParametroDatetime", idParam, nvarcharParam, datetimeParam);
     }
 
+    public async Task IniciarSesion(string UserP, string PassP)
+    {
+        var User = new SqlParameter("@User", UserP);
+        var Pass = new SqlParameter("@Pass", PassP);
+
+        await Database.ExecuteSqlRawAsync("EXEC IniciarSesion @User, @Pass", User, Pass);
+    }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
