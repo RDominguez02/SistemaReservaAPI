@@ -51,6 +51,26 @@ namespace SistemaReservaAPI.Controllers
             return Ok(); // O devuelve un objeto más informativo si es necesario
         }
 
+        // DELETE: api/EstacionServicio/5/3
+        [HttpDelete("{idEstacion}/{idServicio}")]
+    
+        public async Task<IActionResult> DeleteEstacionServicio(int idEstacion, int idServicio)
+        {
+            var estacionServicio = await _context.Estacion_Servicio
+                .FirstOrDefaultAsync(es => es.IdEstacionEstser == idEstacion && es.IdServicioEstser == idServicio);
+
+            if (estacionServicio == null)
+            {
+                return NotFound();
+            }
+
+            _context.Estacion_Servicio.Remove(estacionServicio);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
         [HttpGet]
         [Route("listaEstacionServicio")]
         public async Task<ActionResult<IEnumerable<EstacionServicio>>> GetLavadorServicios()
