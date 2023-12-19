@@ -20,6 +20,15 @@ builder.Services.AddDbContext<SistemaReservaCitaContext>(opciones =>
     opciones.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSql")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddControllers(options =>
+{
+    // Especifica el tipo de contenido predeterminado para todas las acciones
+    options.Filters.Add(new ProducesAttribute("application/json"));
+    // Especifica el tipo de contenido predeterminado para todas las solicitudes
+    options.Filters.Add(new ConsumesAttribute("application/json"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,15 +41,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
-builder.Services.AddControllers(options =>
-{
-    // Especifica el tipo de contenido predeterminado para todas las acciones
-    options.Filters.Add(new ProducesAttribute("application/json"));
-    // Especifica el tipo de contenido predeterminado para todas las solicitudes
-    options.Filters.Add(new ConsumesAttribute("application/json"));
-});
 
 //app.UseHttpsRedirection();
 
