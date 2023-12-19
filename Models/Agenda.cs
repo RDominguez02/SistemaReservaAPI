@@ -16,3 +16,9 @@ public class AgendaTuDiaRequest
 
     public required DateTime ParametroDatetime { get; set; }
 }
+
+public class CitaEliminarRequest
+{
+    public int idCita { get; set; }
+
+}

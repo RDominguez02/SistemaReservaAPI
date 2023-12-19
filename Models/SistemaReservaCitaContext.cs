@@ -78,6 +78,13 @@ public partial class SistemaReservaCitaContext : DbContext
         await Database.ExecuteSqlRawAsync("EXEC Agendatudia @IdParametroNumerico, @ParametroNvarchar, @ParametroDatetime", idParam, nvarcharParam, datetimeParam);
     }
 
+    public async Task EliminarCitaYDetalleAsync(int idCita)
+    {
+        var IdCita = new SqlParameter("@IdCita", idCita);
+
+        await Database.ExecuteSqlRawAsync("EXEC EliminarCitaYDetalles @IdCita", IdCita);
+    }
+
     public async Task IniciarSesion(string UserP, string PassP)
     {
         var User = new SqlParameter("@User", UserP);

@@ -32,5 +32,36 @@ namespace SistemaReservaAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("{idPersona}")]
+        public async Task<ActionResult<IEnumerable<Citum>>> GetCitasPorPersona(int idPersona)
+        {
+            var citas = await _context.Cita
+                .Where(c => c.IdUsuarioCit == idPersona)
+                .ToListAsync();
+
+            if (citas == null)
+            {
+                return NotFound();
+            }
+
+            return citas;
+        }
+
+        [HttpPost]
+        [Route("Eliminar")]
+        public async Task<IActionResult> EliminarCitaYDetalles([FromBody] CitaEliminarRequest request)
+        {
+            try
+            {
+                await _context.EliminarCitaYDetalleAsync(request.idCita);
+                return Ok("Cita eliminada con éxito.");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
