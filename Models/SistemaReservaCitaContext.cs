@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using SistemaReservaAPI.Models;
 
 namespace SistemaReservaAPI.Server.Models;
 
@@ -15,6 +16,10 @@ public partial class SistemaReservaCitaContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<LavadorServicio> Lavador_Servicio { get; set; }
+
+    public virtual DbSet<EstacionServicio> Estacion_Servicio { get; set; }
 
     public virtual DbSet<Citum> Cita { get; set; }
 
@@ -260,6 +265,30 @@ public partial class SistemaReservaCitaContext : DbContext
                         j.IndexerProperty<int>("IdServicioLavser").HasColumnName("idServicio_lavser");
                     });
         });
+
+        modelBuilder.Entity<LavadorServicio>()
+        .HasKey(ls => new { ls.IdLavadorLavser, ls.IdServicioLavser });
+
+        modelBuilder.Entity<LavadorServicio>()
+       .Property(ls => ls.IdLavadorLavser)
+       .HasColumnName("idLavador_lavser");
+
+        modelBuilder.Entity<LavadorServicio>()
+        .Property(ls => ls.IdServicioLavser)
+        .HasColumnName("idServicio_lavser");
+
+
+
+        modelBuilder.Entity<EstacionServicio>()
+        .HasKey(es => new { es.IdEstacionEstser, es.IdServicioEstser });
+
+        modelBuilder.Entity<EstacionServicio>()
+       .Property(es => es.IdEstacionEstser)
+       .HasColumnName("idEstacion_estser");
+
+        modelBuilder.Entity<EstacionServicio>()
+            .Property(es => es.IdServicioEstser)
+            .HasColumnName("idServicio_estser");
 
         modelBuilder.Entity<LavadorStatus>(entity =>
         {

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaReservaAPI.Server.Models;
 
@@ -32,7 +33,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
+builder.Services.AddControllers(options =>
+{
+    // Especifica el tipo de contenido predeterminado para todas las acciones
+    options.Filters.Add(new ProducesAttribute("application/json"));
+    // Especifica el tipo de contenido predeterminado para todas las solicitudes
+    options.Filters.Add(new ConsumesAttribute("application/json"));
+});
+
+//app.UseHttpsRedirection();
 
 app.UseCors("MyCorsPolicy");
 

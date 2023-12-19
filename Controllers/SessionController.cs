@@ -19,7 +19,6 @@ namespace SistemaReservaAPI.Controllers
         }
 
         [HttpPost("IniciarSesion")]
-        [Consumes("text/plain")]
         public ActionResult<int> IniciarSesion([FromBody] sesion usuario)
         {
             try
