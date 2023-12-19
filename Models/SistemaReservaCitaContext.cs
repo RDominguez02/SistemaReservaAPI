@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SistemaReservaAPI.Models;
@@ -48,14 +49,24 @@ public partial class SistemaReservaCitaContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=SQL5112.site4now.net;Initial Catalog=db_aa1a9f_sistemareservacita;User Id=db_aa1a9f_sistemareservacita_admin;Password=fmdm03997161");
-        //=> optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS01;Initial Catalog=SistemaReservaCita;Integrated Security=True;MultipleActiveResultSets=True");
+    //=> optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS01;Initial Catalog=SistemaReservaCita;Integrated Security=True;MultipleActiveResultSets=True");
     //STORED PROCEDURES
-    public async Task CrearCitaRapidaAsync(int idParametroNumerico, string parametroNvarchar)
+    public async Task<string> CrearCitaRapidaAsync(int idParametroNumerico, string parametroNvarchar)
     {
         var idParam = new SqlParameter("@IdParametroNumerico", idParametroNumerico);
         var nvarcharParam = new SqlParameter("@ParametroNvarchar", parametroNvarchar);
+        var mensajeParam = new SqlParameter
+        {
+            ParameterName = "@Mensaje",
+            SqlDbType = SqlDbType.NVarChar,
+            Size = 4000, // Ajusta el tamaño según sea necesario
+            Direction = ParameterDirection.Output
+        };
 
-        await Database.ExecuteSqlRawAsync("EXEC CrearCitaRapida @IdParametroNumerico, @ParametroNvarchar", idParam, nvarcharParam);
+        await Database.ExecuteSqlRawAsync("EXEC CrearCitaRapida @IdParametroNumerico, @ParametroNvarchar, @Mensaje OUTPUT",
+            idParam, nvarcharParam, mensajeParam);
+
+        return mensajeParam.Value as string;
     }
 
     public async Task CrearAgendatuDiaAsync(int idParametroNumerico, string parametroNvarchar, DateTime parametroDatetime)

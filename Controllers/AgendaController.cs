@@ -23,8 +23,8 @@ namespace SistemaReservaAPI.Controllers
         {
             try
             {
-                await _context.CrearCitaRapidaAsync(request.IdParametroNumerico, request.ParametroNvarchar);
-                return Ok("Cita creada con éxito.");
+                var mensaje = await _context.CrearCitaRapidaAsync(request.IdParametroNumerico, request.ParametroNvarchar);
+                return Ok(mensaje);
             }
             catch (Exception ex)
             {
