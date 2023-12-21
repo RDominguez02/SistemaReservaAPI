@@ -20,6 +20,8 @@ public partial class SistemaReservaCitaContext : DbContext
 
     public virtual DbSet<LavadorServicio> Lavador_Servicio { get; set; }
 
+    public DbSet<InfoCita> InfoCita { get; set; }
+
     public virtual DbSet<EstacionServicio> Estacion_Servicio { get; set; }
 
     public virtual DbSet<Citum> Cita { get; set; }
@@ -45,6 +47,27 @@ public partial class SistemaReservaCitaContext : DbContext
     public virtual DbSet<Servicio> Servicios { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
+
+    public async Task<List<InfoCita>> ObtenerDetallesCitasAsync()
+    {
+        return await InfoCita.FromSqlRaw(@"
+            SELECT cita.idCita_cit, estacion.Descripcion_est, lavador.Nombre_lav, cita.Fecha_cit, cita.Duracion_cit, cita.FechaFin_cit
+            FROM cita
+            INNER JOIN estacion ON cita.idEstacion_cit = estacion.idEstacion_est
+            INNER JOIN lavador ON cita.idLavador_cit = lavador.idLavador_lav").ToListAsync();
+    }
+
+    public async Task<List<InfoCita>> ObtenerDetallesCitasPorUsuarioAsync(int idUsuario)
+    {
+        var idUsuarioParam = new SqlParameter("@idUsuario", idUsuario);
+
+        return await InfoCita.FromSqlRaw(@"
+        SELECT cita.idCita_cit, estacion.Descripcion_est, lavador.Nombre_lav, cita.Fecha_cit, cita.Duracion_cit, cita.FechaFin_cit
+        FROM cita
+        INNER JOIN estacion ON cita.idEstacion_cit = estacion.idEstacion_est
+        INNER JOIN lavador ON cita.idLavador_cit = lavador.idLavador_lav
+        WHERE cita.idUsuario_cit = @idUsuario", idUsuarioParam).ToListAsync();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -340,6 +363,8 @@ public partial class SistemaReservaCitaContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("Descripcion_rol");
         });
+
+        modelBuilder.Entity<InfoCita>().HasNoKey();
 
         modelBuilder.Entity<Servicio>(entity =>
         {

@@ -1,4 +1,4 @@
-﻿    using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaReservaAPI.Models;
 using SistemaReservaAPI.Server.Models;
@@ -60,6 +60,35 @@ namespace SistemaReservaAPI.Controllers
             catch (Exception ex)
             {
                 // Manejo de errores
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Info")]
+        public async Task<ActionResult<IEnumerable<InfoCita>>> ObtenerDetallesCitas()
+        {
+            try
+            {
+                var detallesCitas = await _context.ObtenerDetallesCitasAsync();
+                return Ok(detallesCitas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("Info/{idUsuario}")]
+        public async Task<ActionResult<IEnumerable<InfoCita>>> ObtenerDetallesCitasPorUsuario(int idUsuario)
+        {
+            try
+            {
+                var detallesCitas = await _context.ObtenerDetallesCitasPorUsuarioAsync(idUsuario);
+                return Ok(detallesCitas);
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }
